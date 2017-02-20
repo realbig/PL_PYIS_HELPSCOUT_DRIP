@@ -33,6 +33,24 @@ if ( ! class_exists( 'PYIS_HelpScout_Drip' ) ) {
 		 * @since		1.0.0
 		 */
 		private $admin_errors;
+		
+		/**
+		 * @var			PYIS_HelpScout_Drip $admin Admin Settings
+		 * @since		1.0.0
+		 */
+		public $admin;
+		
+		/**
+		 * @var			PYIS_HelpScout_Drip $rest REST Endpoints
+		 * @since		1.0.0
+		 */
+		public $rest;
+		
+		/**
+		 * @var			PYIS_HelpScout_Drip $drip_api Drip API Class
+		 * @since		1.0.0
+		 */
+		public $drip_api;
 
 		/**
 		 * Get active instance
@@ -154,6 +172,28 @@ if ( ! class_exists( 'PYIS_HelpScout_Drip' ) ) {
 		 * @return	  void
 		 */
 		private function require_necessities() {
+			
+			if ( is_admin() ) {
+                
+                require_once PYIS_HelpScout_Drip_DIR . 'core/admin/pyis-helpscout-drip-admin.php';
+                $this->settings = new PYIS_HelpScout_Drip_Admin();
+                
+            }
+            
+            $api_key = get_option( 'pyis_drip_api_key' );
+            $api_key = ( $api_key ) ? $api_key : '';
+            
+            $account_id = get_option( 'pyis_drip_account_id' );
+            $account_id = ( $account_id ) ? $account_id : '';
+            
+            $account_password = get_option( 'pyis_drip_account_password' );
+            $account_password = ( $account_password ) ? $account_password : '';
+            
+            require_once PYIS_HelpScout_Drip_DIR . 'core/api/pyis-helpscout-drip-api.php';
+            $this->drip_api = new PYIS_HelpScout_Drip_API( $api_key, $account_id, $account_password );
+            
+            require_once PYIS_HelpScout_Drip_DIR . 'core/rest/pyis-helpscout-drip-helpscout-rest.php';
+            $this->rest = new PYIS_HelpScout_Drip_REST();
 			
 		}
 		
