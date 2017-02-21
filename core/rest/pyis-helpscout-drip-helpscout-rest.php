@@ -135,7 +135,7 @@ class PYIS_HelpScout_Drip_REST {
 		// build HTML output
 		$html = '';
 		foreach ( $this->drip_data->subscribers[0]->tags as $tag ) {
-			$html .= str_replace( '\t', '', $this->tag_row( $tag ) );
+			$html .= str_replace( "\t", '', $this->tag_row( $tag ) );
 		}
 		
 		return $html;
