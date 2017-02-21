@@ -115,7 +115,7 @@ class PYIS_HelpScout_Drip_REST {
 		
 		// check request signature
 		if ( isset( $_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'] ) && 
-			$_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'] == get_option( 'pyis_helpscout_drip_secret_key' ) ) {
+			$_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'] == get_option( 'pyis_helpscout_secret_key' ) ) {
 			return true;
 		}
 		
