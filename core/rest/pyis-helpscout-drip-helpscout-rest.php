@@ -115,11 +115,26 @@ class PYIS_HelpScout_Drip_REST {
 		
 		// check request signature
 		if ( isset( $_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'] ) && 
-			$_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'] == get_option( 'pyis_helpscout_secret_key' ) ) {
+			$_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'] == $this->hash_secret_key( get_option( 'pyis_helpscout_secret_key' ) ) ) {
 			return true;
 		}
 		
 		return false;
+		
+	}
+	
+	/**
+	 * Hashes the Secret Key to match the Signature from HelpScout
+	 * 
+	 * @param		string $secret_key Secret Key stored in WP Database
+	 *                                                    
+	 * @access		private
+	 * @since		1.0.0
+	 * @return		string Hashed Secret Key
+	 */
+	private function hash_secret_key( $secret_key ) {
+		
+		return base64_encode( hash_hmac( 'sha1', json_encode( $this->helpscout_data ), $secret_key, true ) );
 		
 	}
 	
