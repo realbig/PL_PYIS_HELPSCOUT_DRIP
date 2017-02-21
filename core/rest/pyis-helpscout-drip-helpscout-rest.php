@@ -147,6 +147,14 @@ class PYIS_HelpScout_Drip_REST {
 	 */
 	private function build_response_html() {
 		
+		if ( property_exists( $this->drip_data, 'errors' ) ) {
+			return '<p>' . sprintf( _x( '%s does not exist in Drip', 'Email Address does not exist in Drip', PYIS_HelpScout_Drip_ID ), $this->helpscout_data['customer']['email'] ) . '</p>';
+		}
+		
+		if ( count( $this->drip_data->subscribers[0]->tags ) == 0 ) {
+			return '<p>' . sprintf( _x( 'No Tags for %s in Drip', 'Email Address has no Tags in Drip', PYIS_HelpScout_Drip_ID ), $this->helpscout_data['customer']['email'] ) . '</p>';
+		}
+		
 		// build HTML output
 		$html = '';
 		foreach ( $this->drip_data->subscribers[0]->tags as $tag ) {
