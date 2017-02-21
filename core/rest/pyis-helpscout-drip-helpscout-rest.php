@@ -2,7 +2,7 @@
 /**
  * Creates REST Endpoints
  *
- * @since 0.1.0
+ * @since 1.0.0
  *
  * @package PYIS_HelpScout_Drip
  * @subpackage PYIS_HelpScout_Drip/core/rest
@@ -11,12 +11,23 @@
 defined( 'ABSPATH' ) || die();
 
 class PYIS_HelpScout_Drip_REST {
-
+	
+	/**
+     * @var         PYIS_HelpScout_Drip_REST $helpscout_data Holds the incoming JSON from HelpScout
+     * @since       1.0.0
+     */
+    private $helpscout_data;
+	
+	/**
+     * @var         PYIS_HelpScout_Drip_REST $drip_data Holds the received JSON from Drip
+     * @since       1.0.0
+     */
+    private $drip_data;
 
     /**
 	 * PYIS_HelpScout_Drip_REST constructor.
 	 *
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
     function __construct() {
 
@@ -27,7 +38,7 @@ class PYIS_HelpScout_Drip_REST {
     /**
      * Creates a WP REST API route for HelpScout to POST JSON to
      * 
-     * @since       0.1.0
+     * @since       1.0.0
      * @access      public
      * @return      void
      */
@@ -35,7 +46,7 @@ class PYIS_HelpScout_Drip_REST {
 
         register_rest_route( 'pyis/v1', '/helpscout/submit', array(
             'methods' => 'POST',
-            'callback' => array( $this, 'send_to_helpscout' ),
+            'callback' => array( $this, 'endpoint' ),
         ) );
 
     }
@@ -46,24 +57,135 @@ class PYIS_HelpScout_Drip_REST {
      * @param       object $request WP_REST_Request Object
      * @return      string JSON
      */
-    public function send_to_helpscout( $request ) {
+    public function endpoint( $request ) {
+		
+		// Capture incoming JSON from HelpScout
+		$this->helpscout_data = $this->get_incoming_data();
 
-        $json = file_get_contents( 'php://input' );
-
-        if ( empty( $json ) ) {
-            return json_encode( array(
-                'success' => false,
-                'message' => _x( 'No data payload', 'No JSON Uploaded Error', PYIS_HelpScout_Drip_ID ),
-            ) );
-        }
-        
-        $json = json_decode( $json );
-        
-        return json_encode( array(
-            'success' => true,
-            'message' => __( 'Success!', PYIS_HelpScout_Drip_ID ),
-        ) );
+        // Ensure the request is valid. Also ensures random people aren't abusing the endpoint
+		if ( ! $this->validate() ) {
+			$this->respond( _x( 'Access Denied', 'Invalid Request Error', PYIS_HelpScout_Drip_ID ) );
+			exit;
+		}
+		
+		// Use Helpscout Data to get data from Drip
+		$this->drip_data = PYISHELPSCOUTDRIP()->drip_api->get( 'subscribers/' . $this->helpscout_data['customer']['email'] );
+		
+		// Build HTML out of our data
+		$html = $this->build_response_html();
+		
+		// Give HelpScout the HTML as JSON
+		$this->respond( $html );
 
     }
+	
+	/**
+	 * Captures incoming JSON
+	 * Stored as an Associative Array so we can use isset() which is more precise for our needs
+	 * 
+	 * @acess		private
+	 * @since		1.0.0
+	 * @return		array Associative Array representation of the JSON
+	 */
+	private function get_incoming_data() {
+		
+		$json = file_get_contents( 'php://input' );
+        
+        return json_decode( $json, true );
+		
+	}
+	
+	/**
+	 * Ensures the Request to the WP Site is valid
+	 * 
+	 * @access		private
+	 * @since		1.0.0
+	 * @return		boolean Valid/Invalid Request
+	 */
+	private function validate() {
+		
+		// we need at least this
+		if ( ! isset( $this->helpscout_data['customer']['email'] ) && 
+			! isset( $this->helpscout_data['customer']['emails'] ) ) {
+			return false;
+		}
+		
+		// check request signature
+		if ( isset( $_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'] ) && 
+			$_SERVER['HTTP_X_HELPSCOUT_SIGNATURE'] == get_option( 'pyis_helpscout_drip_secret_key' ) ) {
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	 * Constructs HTML for the Response to HelpScout
+	 * 
+	 * @access		private
+	 * @since		1.0.0
+	 * @return		string HTML
+	 */
+	private function build_response_html() {
+		
+		// build HTML output
+		$html = '';
+		foreach ( $this->drip_data->subscribers[0]->tags as $tag ) {
+			$html .= str_replace( '\t', '', $this->tag_row( $tag ) );
+		}
+		
+		return $html;
+		
+	}
+	
+	/**
+	 * Generates HTML for each Tag
+	 * 
+	 * @param		string $tag Tag from Drip
+	 *                              
+	 * @access		public
+	 * @since		1.0.0
+	 * @return		string HTML
+	 */
+	public function tag_row( $tag ) {
+		
+		ob_start();
+		
+		include PYIS_HelpScout_Drip_DIR . 'core/views/pyis-helpscout-drip-tag-row.php';
+		
+		$html = ob_get_clean();
+		
+		return $html;
+		
+	}
+	
+	/**
+	 * Renders Response after a Request
+	 * 
+	 * @param		string  $html HTML to be sent to HelpScout
+	 * @param		integer $code HTTP Response Code. Defaults to 200
+	 *                                                       
+	 * @access		private
+	 * @since		1.0.0
+	 * @return		void
+	 */
+	private function respond( $html, $code = 200 ) {
+		
+		$response = array( 'html' => $html );
+		
+		// Clear output, other plugins might have thrown dumb errors by now.
+		if ( ob_get_level() > 0 ) {
+			ob_end_clean();
+		}
+		
+		status_header( $code );
+		
+		header( "Content-Type: application/json" );
+		echo json_encode( $response );
+		
+		die();
+		
+	}
 
 }

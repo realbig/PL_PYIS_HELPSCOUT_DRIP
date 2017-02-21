@@ -2,7 +2,7 @@
 /**
  * PyImageSearch Helpscout+Drip Settings
  *
- * @since 0.1.0
+ * @since 1.0.0
  *
  * @package PYIS_HelpScout_Drip
  * @subpackage PYIS_HelpScout_Drip/core/admin
@@ -15,7 +15,7 @@ class PYIS_HelpScout_Drip_Admin {
     /**
 	 * PYIS_HelpScout_Drip_Admin constructor.
 	 *
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
     function __construct() {
 
@@ -29,7 +29,7 @@ class PYIS_HelpScout_Drip_Admin {
      * Create the Admin Page to hold our Settings
      * 
      * @access      public
-     * @since       0.1.0
+     * @since       1.0.0
      * @return      void
      */
     public function create_admin_page() {
@@ -49,7 +49,7 @@ class PYIS_HelpScout_Drip_Admin {
      * Create the Content/Form for our Admin Page
      * 
      * @access      public
-     * @since       0.1.0
+     * @since       1.0.0
      * @return      void
      */
     public function admin_page_content() { ?>
@@ -211,7 +211,7 @@ class PYIS_HelpScout_Drip_Admin {
      * Register our Options so the Admin Page knows what to Save
      * 
      * @access      public
-     * @since       0.1.0
+     * @since       1.0.0
      * @return      void
      */
     public function register_options() {

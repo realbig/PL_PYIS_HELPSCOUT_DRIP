@@ -189,8 +189,8 @@ if ( ! class_exists( 'PYIS_HelpScout_Drip' ) ) {
             $account_password = get_option( 'pyis_drip_account_password' );
             $account_password = ( $account_password ) ? $account_password : '';
             
-            require_once PYIS_HelpScout_Drip_DIR . 'core/api/pyis-helpscout-drip-api.php';
-            $this->drip_api = new PYIS_HelpScout_Drip_API( $api_key, $account_id, $account_password );
+            require_once PYIS_HelpScout_Drip_DIR . 'core/api/pyis-helpscout-drip-api-drip.php';
+            $this->drip_api = new PYIS_HelpScout_Drip_API_Drip( $api_key, $account_id, $account_password );
             
             require_once PYIS_HelpScout_Drip_DIR . 'core/rest/pyis-helpscout-drip-helpscout-rest.php';
             $this->rest = new PYIS_HelpScout_Drip_REST();

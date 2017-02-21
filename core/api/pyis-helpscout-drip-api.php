@@ -1,8 +1,8 @@
 <?php
 /**
- * Drip API v3.0 Communication Class
+ * Abstract API Class that handles most of the logic
  *
- * @since 0.1.0
+ * @since 1.0.0
  *
  * @package PYIS_HelpScout_Drip
  * @subpackage PYIS_HelpScout_Drip/core/api
@@ -10,48 +10,28 @@
 
 defined( 'ABSPATH' ) || die();
 
-class PYIS_HelpScout_Drip_API {
-
-    /**
-    * @var         PYIS_HelpScout_Drip_API $api_key Holds set API Key
-    * @since       0.1.0
-    */
-    private $api_key = '';
-    
-    /**
-    * @var         PYIS_HelpScout_Drip_API $account_id The Account ID the API Key belongs to. Yep, we need both.
-    * @since       0.1.0
-    */
-    private $account_id = '';
-    
-    /**
-    * @var         PYIS_HelpScout_Drip_API $password The Account ID the API Key belongs to. Yep, we need both.
-    * @since       0.1.0
-    */
-    private $password = '';
-    
-    /**
-    * @var         PYIS_HelpScout_Drip_API $api_endpoint Holds set API Endpoint
-    * @since       0.1.0
-    */
-    public $api_endpoint = 'https://api.getdrip.com/v2/<account_id>/';
-
-    /**
-	 * PYIS_HelpScout_Drip_API constructor.
+abstract class PYIS_HelpScout_Drip_API_Class {
+	
+	/**
+     * @var         PYIS_HelpScout_Drip_API_Class $api_endpoint Holds set API Endpoint
+     * @since       1.0.0
+     */
+    public $api_endpoint = '';
+	
+	/**
+     * @var         PYIS_HelpScout_Drip_API_Class $headers The Headers sent to the API
+     * @since       1.0.0
+     */
+    private $headers = array();
+	
+	/**
+	 * PYIS_HelpScout_Drip_API_Class constructor.
 	 * 
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
-    function __construct( $api_key, $account_id, $password ) {
-
-        $this->api_key = trim( $api_key );
-        
-        // Construct the appropriate API Endpoint        
-        $this->account_id = trim( $account_id );
-        $this->api_endpoint  = str_replace( '<account_id>', $this->account_id, $this->api_endpoint );
-        
-        $this->password = $password;
-
-    }
+    function __construct() {
+		// Extended Classes have their own Constructors
+	}
 
     /**
      * Make an HTTP DELETE request - for deleting data
@@ -61,7 +41,7 @@ class PYIS_HelpScout_Drip_API {
      * @param       int         $timeout Timeout limit for request in seconds
      *                                                                
      * @access      public
-     * @since       0.1.0
+     * @since       1.0.0
      * @return      array|false Assoc array of API response, decoded from JSON
      */
     public function delete( $method, $args = array(), $timeout = 10 ) {
@@ -88,7 +68,7 @@ class PYIS_HelpScout_Drip_API {
      * @param       int         $timeout Timeout limit for request in seconds
      *                                                                
      * @access      public
-     * @since       0.1.0
+     * @since       1.0.0
      * @return      array|false Assoc array of API response, decoded from JSON
      */
     public function patch( $method, $args = array(), $timeout = 10 ) {
@@ -103,7 +83,7 @@ class PYIS_HelpScout_Drip_API {
      * @param       int         $timeout Timeout limit for request in seconds
      *                                                                
      * @access      public
-     * @since       0.1.0
+     * @since       1.0.0
      * @return      array|false Assoc array of API response, decoded from JSON
      */
     public function post( $method, $args = array(), $timeout = 10 ) {
@@ -118,7 +98,7 @@ class PYIS_HelpScout_Drip_API {
      * @param       int         $timeout Timeout limit for request in seconds
      * 
      * @access      public
-     * @since       0.1.0
+     * @since       1.0.0
      * @return      array|false Assoc array of API response, decoded from JSON
      */
     public function put( $method, $args = array(), $timeout = 10 ) {
@@ -134,7 +114,7 @@ class PYIS_HelpScout_Drip_API {
      * @param       int $timeout
      *                  
      * @access      private
-     * @since       0.1.0
+     * @since       1.0.0
      * @return      array|false Assoc array of decoded result
      */
     private function make_request( $http_verb, $method, $args = array(), $timeout = 10 ) {
@@ -142,13 +122,10 @@ class PYIS_HelpScout_Drip_API {
         $args = wp_parse_args( $args, array(
             'method' => $http_verb,
             'timeout' => $timeout,
-            'headers' => array(),
+            'headers' => $this->headers,
         ) );
         
         $url = $this->api_endpoint . '/' . $method;
-        
-        $args['headers']['Authorization'] = 'Basic ' . base64_encode( $this->api_key . ':' . $this->password );
-        $args['headers']['Content-Type'] = 'application/vnd.api+json';
         
         $response = wp_remote_request( $url, $args );
 
@@ -160,11 +137,26 @@ class PYIS_HelpScout_Drip_API {
      * Return the API Endpoint
      * 
      * @access      public
-     * @since       0.1.0
-     * @return      string Drip API Endpoint
+     * @since       1.0.0
+     * @return      string API Endpoint
      */
     public function get_api_endpoint() {
         return $this->api_endpoint;
     }
+	
+	/**
+	 * Sets the Private $header Member
+	 * 
+	 * @param		array $headers New Header Values
+	 *                                   
+	 * @access		public
+	 * @since		1.0.0
+	 * @return		void
+	 */
+	public function set_headers( $headers ) {
+		
+		$this->headers = $headers;
+		
+	}
 
 }
