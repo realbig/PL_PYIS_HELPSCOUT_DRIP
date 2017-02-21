@@ -69,16 +69,33 @@ class PYIS_HelpScout_Drip_Admin {
 							
 							<th scope="row">
 								<label for="helpscout_instructions">
-									<?php echo _x( 'HelpScout API Setup', 'HelpScout API Setup Label', PYIS_HelpScout_Drip_ID ); ?>
+									<?php echo _x( 'HelpScout App Setup', 'HelpScout App Setup Label', PYIS_HelpScout_Drip_ID ); ?>
 								</label>
 							</th>
 							
 							<td>
-								<ol>
+								
+								<p>
+									<a href="//secure.helpscout.net/apps/custom/" target="_blank">
+										<?php echo _x( 'Create a HelpScout Custom App with the following options:', 'HelpScout Custom App Instructions Label', PYIS_HelpScout_Drip_ID ); ?>
+									</a>
+								</p>
+								
+								<ul style="list-style: disc; margin-top: 0.5em; margin-left: 2em;">
 									<li>
-										<?php printf( __( 'Place <code>%s/wp-json/pyis/v1/helpscout/practical-python-open-cv-hardcopy/submit</code> into the "Submit Entry Endpoint" text input and save your changes.', PYIS_HelpScout_Drip_ID ), get_site_url() ); ?>
+										<?php echo _x( 'App Name: <code>Drip Tags</code>', 'HelpScout App Name Label', PYIS_HelpScout_Drip_ID ); ?>
 									</li>
-								</ol>
+									<li>
+										<?php echo _x( 'Content Type: <code>Dynamic Content</code>', 'HelpScout App Content Type Label', PYIS_HelpScout_Drip_ID ); ?>
+									</li>
+									<li>
+										<?php printf( _x( 'Callback URL: <code>%s/wp-json/pyis/v1/helpscout/submit</code>', 'HelpScout App Callback URL Label', PYIS_HelpScout_Drip_ID ), get_site_url() ); ?>
+									</li>
+									<li>
+										<?php echo _x( 'Secret Key: The same value entered below.', 'HelpScout App Secret Key Label', PYIS_HelpScout_Drip_ID ); ?>
+									</li>
+								</ul>
+								
 							</td>
 						
 						</tr>
@@ -96,29 +113,6 @@ class PYIS_HelpScout_Drip_Admin {
 								<p class="description">
 									<?php echo _x( "This is used to help ensure people aren't abusing your API Endpoint.", 'Cognito Forms Secret Key Description', PYIS_HelpScout_Drip_ID ); ?>
 								</p>
-								<ol>
-									<li>
-										<?php echo __( 'Edit your Form.', PYIS_HelpScout_Drip_ID ); ?>
-									</li>
-									<li>
-										<?php echo __( 'Click a "+" button at the bottom of your Form to add a Field.', PYIS_HelpScout_Drip_ID ); ?>
-									</li>
-									<li>
-										<?php echo __( 'Choose a Basic Form Input, such as Text or Number.', PYIS_HelpScout_Drip_ID ); ?>
-									</li>
-									<li>
-										<?php echo __( 'Set "Label" to <code>Secret</code>.', PYIS_HelpScout_Drip_ID ); ?>
-									</li>
-									<li>
-										<?php printf( __( 'Set "Default Vaue" to the same value entered above.', PYIS_HelpScout_Drip_ID ), get_site_url() ); ?>
-									</li>
-									<li>
-										<?php printf( __( 'Set "Show This Field" to <em>Never</em> and "Require This Field" to <em>Always</em>.', PYIS_HelpScout_Drip_ID ), get_site_url() ); ?>
-									</li>
-									<li>
-										<?php printf( __( 'This value is only sent in the JSON Data, so it cannot be found by Inspecting the Page Source or by Viewing the Entry.', PYIS_HelpScout_Drip_ID ), get_site_url() ); ?>
-									</li>
-								</ol>
 							</td>
 						
 						</tr>
@@ -171,23 +165,6 @@ class PYIS_HelpScout_Drip_Admin {
 								<input required type="password" class="regular-text" name="pyis_drip_account_password" value="<?php echo ( $account_password = get_option( 'pyis_drip_account_password' ) ) ? $account_password : ''; ?>" /><br />
 								<p class="description">
 									<?php echo _x( 'Your Password is needed to Authenticate the API Request.', 'Account Password Explaination Text', PYIS_HelpScout_Drip_ID ); ?>
-								</p>
-							</td>
-						
-						</tr>
-						
-						<tr>
-							
-							<th scope="row">
-								<label for="PYIS_HelpScout_Drip_admin_email">
-									<?php echo _x( 'Send Notification Emails To:', 'Admin Email Label', PYIS_HelpScout_Drip_ID ); ?>
-								</label>
-							</th>
-							
-							<td>
-								<input type="text" class="regular-text" name="PYIS_HelpScout_Drip_admin_email" value="<?php echo ( $admin_email = get_option( 'PYIS_HelpScout_Drip_admin_email' ) ) ? $admin_email : ''; ?>" placeholder="<?php echo ( $default_admin_email = get_option( 'admin_email' ) ) ? $default_admin_email : ''; ?>" /><br />
-								<p class="description">
-									<?php printf( _x( 'This will default to the Admin Email: %s.', 'Admin Email Explaination Text', PYIS_HelpScout_Drip_ID ), $default_admin_email ); ?>
 								</p>
 							</td>
 						
