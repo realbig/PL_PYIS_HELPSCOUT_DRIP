@@ -174,26 +174,26 @@ if ( ! class_exists( 'PYIS_HelpScout_Drip' ) ) {
 		private function require_necessities() {
 			
 			if ( is_admin() ) {
-                
-                require_once PYIS_HelpScout_Drip_DIR . 'core/admin/pyis-helpscout-drip-admin.php';
-                $this->settings = new PYIS_HelpScout_Drip_Admin();
-                
-            }
-            
-            $api_key = get_option( 'pyis_drip_api_key' );
-            $api_key = ( $api_key ) ? $api_key : '';
-            
-            $account_id = get_option( 'pyis_drip_account_id' );
-            $account_id = ( $account_id ) ? $account_id : '';
-            
-            $account_password = get_option( 'pyis_drip_account_password' );
-            $account_password = ( $account_password ) ? $account_password : '';
-            
-            require_once PYIS_HelpScout_Drip_DIR . 'core/api/pyis-helpscout-drip-api-drip.php';
-            $this->drip_api = new PYIS_HelpScout_Drip_API_Drip( $api_key, $account_id, $account_password );
-            
-            require_once PYIS_HelpScout_Drip_DIR . 'core/rest/pyis-helpscout-drip-helpscout-rest.php';
-            $this->rest = new PYIS_HelpScout_Drip_REST();
+				
+				require_once PYIS_HelpScout_Drip_DIR . 'core/admin/pyis-helpscout-drip-admin.php';
+				$this->settings = new PYIS_HelpScout_Drip_Admin();
+				
+			}
+			
+			$api_key = get_option( 'pyis_drip_api_key' );
+			$api_key = ( $api_key ) ? $api_key : '';
+			
+			$account_id = get_option( 'pyis_drip_account_id' );
+			$account_id = ( $account_id ) ? $account_id : '';
+			
+			$account_password = get_option( 'pyis_drip_account_password' );
+			$account_password = ( $account_password ) ? $account_password : '';
+			
+			require_once PYIS_HelpScout_Drip_DIR . 'core/api/pyis-helpscout-drip-api-drip.php';
+			$this->drip_api = new PYIS_HelpScout_Drip_API_Drip( $api_key, $account_id, $account_password );
+			
+			require_once PYIS_HelpScout_Drip_DIR . 'core/rest/pyis-helpscout-drip-helpscout-rest.php';
+			$this->rest = new PYIS_HelpScout_Drip_REST();
 			
 		}
 		
