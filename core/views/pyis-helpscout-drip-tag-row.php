@@ -14,6 +14,8 @@ defined( 'ABSPATH' ) || die();
 
 <div class="toggleGroup">
 	
+	<?php do_action( 'pyis_helpscout_drip_before_tag', $tag ); ?>
+	
 	<?php echo $tag; ?>
 
 	<?php do_action( 'pyis_helpscout_drip_after_tag', $tag ); ?>
