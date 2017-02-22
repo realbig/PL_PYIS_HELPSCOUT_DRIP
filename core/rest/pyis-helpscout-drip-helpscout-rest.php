@@ -153,13 +153,18 @@ class PYIS_HelpScout_Drip_REST {
 			
 		}
 		
-		if ( count( $this->drip_data->subscribers[0]->tags ) == 0 ) {
+		// Drip returns things as an Array here which holds other Arrays of Tags. To ensure we get them all no matter what, array_map
+		$tags = array_map( function( $subscriber ) {
+			return $subscriber->tags;
+		}, $this->drip_data->subscribers );
+		
+		if ( count( $tags ) == 0 ) {
 			return '<p>' . sprintf( _x( 'No Tags for %s in Drip', 'Email Address has no Tags in Drip', PYIS_HelpScout_Drip_ID ), $this->helpscout_data['customer']['email'] ) . '</p>';
 		}
 		
 		// build HTML output
 		$html = '';
-		foreach ( $this->drip_data->subscribers[0]->tags as $tag ) {
+		foreach ( $tags as $tag ) {
 			$html .= str_replace( "\t", '', $this->tag_row( $tag ) );
 		}
 		
