@@ -114,12 +114,12 @@ msgctxt "Invalid Request Error"
 msgid "Access Denied"
 msgstr ""
 
-#: core/rest/pyis-helpscout-drip-helpscout-rest.php:154
+#: core/rest/pyis-helpscout-drip-helpscout-rest.php:152
 msgctxt "Email Address does not exist in Drip"
 msgid "%s does not exist in Drip. Maybe the Drip credentials are incorrect?"
 msgstr ""
 
-#: core/rest/pyis-helpscout-drip-helpscout-rest.php:165
+#: core/rest/pyis-helpscout-drip-helpscout-rest.php:163
 msgctxt "Email Address has no Tags in Drip"
 msgid "No Tags for %s in Drip"
 msgstr ""
