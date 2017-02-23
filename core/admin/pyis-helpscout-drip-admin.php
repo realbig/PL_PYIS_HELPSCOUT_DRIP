@@ -22,6 +22,8 @@ class PYIS_HelpScout_Drip_Admin {
 		add_action( 'admin_menu', array( $this, 'create_admin_page' ) );
 		
 		add_action( 'admin_init', array( $this, 'register_options' ) );
+		
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
 	}
 	
@@ -111,8 +113,56 @@ class PYIS_HelpScout_Drip_Admin {
 							<td>
 								<input required type="text" class="regular-text" name="pyis_helpscout_secret_key" value="<?php echo ( $secret_key = get_option( 'pyis_helpscout_secret_key' ) ) ? $secret_key : ''; ?>" /><br />
 								<p class="description">
-									<?php echo _x( "This is used to help ensure people aren't abusing your API Endpoint.", 'Cognito Forms Secret Key Description', PYIS_HelpScout_Drip_ID ); ?>
+									<?php echo _x( "This is used to help ensure people aren't abusing your API Endpoint.", 'HelpScout Secret Key Description', PYIS_HelpScout_Drip_ID ); ?>
 								</p>
+							</td>
+						
+						</tr>
+						
+						<tr>
+							
+							<th scope="row">
+								<label for="pyis_helpscout_drip_acceptable_tags">
+									<?php echo _x( 'Acceptable Drip Tags', 'Acceptable Drip Tags Label', PYIS_HelpScout_Drip_ID ); ?>
+								</label>
+							</th>
+							
+							<td>
+								
+								<div class="tagsdiv">
+									
+									<div class="jaxtag">
+									
+										<div class="nojs-tags hide-if-js">
+											<p>
+												<textarea name="pyis_helpscout_drip_acceptable_tags" rows="3" cols="20" class="the-tags" id="tax-input-post_tag" aria-describedby="new-tag-post_tag-desc">
+													<?php echo ( $acceptable_tags = get_option( 'pyis_helpscout_drip_acceptable_tags' ) ) ? $acceptable_tags : ''; ?>
+												</textarea>
+											</p>
+										</div>
+									
+										<div class="ajaxtag hide-if-no-js">
+
+											<p>
+
+												<input type="text" class="regular-text newtag" name="pyis_helpscout_drip_acceptable_tags_fake" />
+
+												<input type="button" class="button tagadd" value="Add">
+
+											</p>
+
+										</div>
+										
+									</div>
+									
+									<div class="tagchecklist"></div>
+									
+								</div>
+									
+								<p class="description">
+									<?php echo _x( "A list of acceptable Drip Tags to be shown within HelpScout. If left blank, all Tags are acceptable.", 'Acceptable Drip Tags Description', PYIS_HelpScout_Drip_ID ); ?>
+								</p>
+								
 							</td>
 						
 						</tr>
@@ -181,9 +231,9 @@ class PYIS_HelpScout_Drip_Admin {
 		</div>
 
 		<?php
-		
+
 	}
-	
+
 	/**
 	 * Register our Options so the Admin Page knows what to Save
 	 * 
@@ -195,6 +245,10 @@ class PYIS_HelpScout_Drip_Admin {
 		
 		if ( false === get_option( 'pyis_helpscout_secret_key' ) ) {
 			add_option( 'pyis_helpscout_secret_key' );
+		}
+		
+		if ( false === get_option( 'pyis_helpscout_drip_acceptable_tags' ) ) {
+			add_option( 'pyis_helpscout_drip_acceptable_tags' );
 		}
 		
 		if ( false === get_option( 'pyis_drip_api_key' ) ) {
@@ -217,9 +271,33 @@ class PYIS_HelpScout_Drip_Admin {
 		);
 		
 		register_setting( 'pyis_helpscout_drip', 'pyis_helpscout_secret_key' );
+		register_setting( 'pyis_helpscout_drip', 'pyis_helpscout_drip_acceptable_tags' );
 		register_setting( 'pyis_helpscout_drip', 'pyis_drip_api_key' );
 		register_setting( 'pyis_helpscout_drip', 'pyis_drip_account_id' );
 		register_setting( 'pyis_helpscout_drip', 'pyis_drip_account_password' );
+		
+	}
+	
+	/**
+	 * Enqueue our Styles/Scripts on only our Admin Page
+	 * 
+	 * @access		public
+	 * @since		1.0.0
+	 * @return		void
+	 */
+	public function admin_enqueue_scripts() {
+		
+		global $current_screen;
+		
+		if ( $current_screen->base == 'settings_page_pyis-helpscout-drip' ) {
+			
+			wp_enqueue_style( PYIS_HelpScout_Drip_ID . '-admin' );
+			
+			wp_enqueue_script( 'tags-box' );
+			
+			wp_enqueue_script( PYIS_HelpScout_Drip_ID . '-admin' );
+			
+		}
 		
 	}
 	
