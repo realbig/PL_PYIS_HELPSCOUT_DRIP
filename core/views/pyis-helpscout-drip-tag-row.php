@@ -11,15 +11,11 @@
 defined( 'ABSPATH' ) || die();
 
 ?>
-
-<div class="toggleGroup">
 	
-	<?php do_action( 'pyis_helpscout_drip_before_tag', $tag ); ?>
+<?php do_action( 'pyis_helpscout_drip_before_tag', $tag, $subscriber_email ); ?>
 	
+<span class="badge info" style="text-transform: none; margin: 0 0.5em 0.5em 0;">
 	<?php echo $tag; ?>
+</span>
 
-	<?php do_action( 'pyis_helpscout_drip_after_tag', $tag ); ?>
-
-</div>
-
-<div class="divider"></div>
+<?php do_action( 'pyis_helpscout_drip_after_tag', $tag, $subscriber_email ); ?>
