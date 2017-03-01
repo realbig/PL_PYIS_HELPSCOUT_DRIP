@@ -14,97 +14,97 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: core/admin/pyis-helpscout-drip-admin.php:41
+#: core/admin/pyis-helpscout-drip-admin.php:43
 msgctxt "Admin Page Title"
 msgid "PyImageSearch HelpScout+Drip"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:42
+#: core/admin/pyis-helpscout-drip-admin.php:44
 msgctxt "Admin Menu Title"
 msgid "HelpScout+Drip"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:60
+#: core/admin/pyis-helpscout-drip-admin.php:62
 msgctxt "Admin Page Title"
 msgid "HelpScout+Drip Integration Settings"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:74
+#: core/admin/pyis-helpscout-drip-admin.php:76
 msgctxt "HelpScout App Setup Label"
 msgid "HelpScout App Setup"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:82
+#: core/admin/pyis-helpscout-drip-admin.php:84
 msgctxt "HelpScout Custom App Instructions Label"
 msgid "Create a HelpScout Custom App with the following options:"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:88
+#: core/admin/pyis-helpscout-drip-admin.php:90
 msgctxt "HelpScout App Name Label"
 msgid "App Name: <code>Drip Tags</code>"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:91
+#: core/admin/pyis-helpscout-drip-admin.php:93
 msgctxt "HelpScout App Content Type Label"
 msgid "Content Type: <code>Dynamic Content</code>"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:94
+#: core/admin/pyis-helpscout-drip-admin.php:96
 msgctxt "HelpScout App Callback URL Label"
 msgid "Callback URL: <code>%s/wp-json/pyis/v1/helpscout/submit</code>"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:97
+#: core/admin/pyis-helpscout-drip-admin.php:99
 msgctxt "HelpScout App Secret Key Label"
 msgid "Secret Key: The same value entered below."
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:109
+#: core/admin/pyis-helpscout-drip-admin.php:111
 msgctxt "HelpScout Secret Key Label"
 msgid "HelpScout Secret Key"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:116
+#: core/admin/pyis-helpscout-drip-admin.php:118
 msgctxt "HelpScout Secret Key Description"
 msgid "This is used to help ensure people aren't abusing your API Endpoint."
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:126
+#: core/admin/pyis-helpscout-drip-admin.php:128
 msgctxt "Acceptable Drip Tags Label"
 msgid "Acceptable Drip Tags"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:163
+#: core/admin/pyis-helpscout-drip-admin.php:165
 msgctxt "Acceptable Drip Tags Description"
-msgid "A list of acceptable Drip Tags to be shown within HelpScout. If left blank, all Tags are acceptable."
+msgid "A list of acceptable Drip Tags to be shown within HelpScout. Regex patterns are acceptable. If left blank, all Tags are acceptable."
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:174
+#: core/admin/pyis-helpscout-drip-admin.php:176
 msgctxt "Drip API Key Label"
 msgid "Drip API Token"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:182
+#: core/admin/pyis-helpscout-drip-admin.php:184
 msgctxt "API Key Link Text"
 msgid "Find your API Token Here"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:193
+#: core/admin/pyis-helpscout-drip-admin.php:195
 msgctxt "Drip Account ID Label"
 msgid "Drip Account ID"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:200
+#: core/admin/pyis-helpscout-drip-admin.php:202
 msgctxt "Account ID Example Text"
 msgid "Your Account ID is found in the Address Bar after logging in. <code>https://www.getdrip.com/&lt;account_id&gt;/</code>"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:210
+#: core/admin/pyis-helpscout-drip-admin.php:212
 msgctxt "Drip Account Password Label"
 msgid "Drip Account Password"
 msgstr ""
 
-#: core/admin/pyis-helpscout-drip-admin.php:217
+#: core/admin/pyis-helpscout-drip-admin.php:219
 msgctxt "Account Password Explaination Text"
 msgid "Your Password is needed to Authenticate the API Request."
 msgstr ""
@@ -114,12 +114,12 @@ msgctxt "Invalid Request Error"
 msgid "Access Denied"
 msgstr ""
 
-#: core/rest/pyis-helpscout-drip-helpscout-rest.php:152
+#: core/rest/pyis-helpscout-drip-helpscout-rest.php:154
 msgctxt "Email Address does not exist in Drip"
-msgid "%s does not exist in Drip. Maybe the Drip credentials are incorrect?"
+msgid "<a href=\"mailto:%s\">%s</a> does not exist in Drip."
 msgstr ""
 
-#: core/rest/pyis-helpscout-drip-helpscout-rest.php:163
+#: core/rest/pyis-helpscout-drip-helpscout-rest.php:165
 msgctxt "Email Address has no Tags in Drip"
-msgid "No Tags for %s in Drip"
+msgid "No Tags for <a href=\"mailto:%s\">%s</a> in Drip"
 msgstr ""

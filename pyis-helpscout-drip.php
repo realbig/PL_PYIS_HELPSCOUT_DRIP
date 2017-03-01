@@ -3,7 +3,7 @@
 Plugin Name: PyImageSearch HelpScout+Drip
 Plugin URL: https://github.com/realbig/PL_PYIS_HELPSCOUT_DRIP
 Description: Integrates HelpScout and Drip using WordPress as a Middleman
-Version: 0.2.1
+Version: 0.3.0
 Text Domain: pyis-helpscout-drip
 Author: Eric Defore
 Author URL: http://realbigmarketing.com/
