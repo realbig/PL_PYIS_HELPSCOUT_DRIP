@@ -147,9 +147,11 @@ class PYIS_HelpScout_Drip_REST {
 	 */
 	private function build_response_html() {
 		
+		$subscriber_email = $this->helpscout_data['customer']['email'];
+		
 		if ( property_exists( $this->drip_data, 'errors' ) ) {
 			
-			return '<p>' . sprintf( _x( '%s does not exist in Drip.', 'Email Address does not exist in Drip', PYIS_HelpScout_Drip_ID ), $this->helpscout_data['customer']['email'] ) . '</p>';
+			return '<div class="toggleGroup"><p>' . sprintf( _x( '<a href="mailto:%s">%s</a> does not exist in Drip.', 'Email Address does not exist in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) . '</p></div><div class="divider"></div>';
 			
 		}
 		
@@ -160,14 +162,14 @@ class PYIS_HelpScout_Drip_REST {
 		}, $this->drip_data->subscribers ) ) );
 		
 		if ( count( $tags ) == 0 ) {
-			return '<p>' . sprintf( _x( 'No Tags for %s in Drip', 'Email Address has no Tags in Drip', PYIS_HelpScout_Drip_ID ), $this->helpscout_data['customer']['email'] ) . '</p>';
+			return '<div class="toggleGroup"><p>' . sprintf( _x( 'No Tags for <a href="mailto:%s">%s</a> in Drip', 'Email Address has no Tags in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) . '</p></div><div class="divider"></div>';
 		}
 		
 		$acceptable_tags = get_option( 'pyis_helpscout_drip_acceptable_tags', '' );
 		$acceptable_tags = array_filter( explode( ',', $acceptable_tags ) );
 		
 		// build HTML output
-		$html = '';
+		$html = '<div class="toggleGroup">';
 		foreach ( $tags as $tag ) {
 			
 			// If we're only allowing certain Tags through, we need to do some more processing
@@ -192,6 +194,8 @@ class PYIS_HelpScout_Drip_REST {
 			$html .= str_replace( "\t", '', $this->tag_row( $tag ) );
 			
 		}
+		
+		$html .= '</div><div class="divider"></div>';
 		
 		return $html;
 		
