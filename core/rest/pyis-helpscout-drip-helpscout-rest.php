@@ -170,10 +170,23 @@ class PYIS_HelpScout_Drip_REST {
 		$html = '';
 		foreach ( $tags as $tag ) {
 			
-			// If the tag is not an Acceptable Tag, skip
-			if ( ! empty( $acceptable_tags ) &&
-				! in_array( $tag, $acceptable_tags ) ) {
-				continue;
+			// If we're only allowing certain Tags through, we need to do some more processing
+			if ( ! empty( $acceptable_tags ) ) {
+				
+				$match = false;
+				foreach ( $acceptable_tags as $regex ) {
+					
+					// If the Tag matches a Tag Pattern, let the outter loop know we have a match
+					if ( (bool) preg_match( '/' . $regex . '/i', $tag ) ) {
+						$match = true;
+						break;
+					}
+					
+				}
+				
+				// If the Tag matched none of the Tag Patterns, skip it
+				if ( ! $match ) continue;
+				
 			}
 			
 			$html .= str_replace( "\t", '', $this->tag_row( $tag ) );
