@@ -1,5 +1,9 @@
 .tagsdiv {
 	
+	input[type=text].ui-autocomplete-loading {
+		background-image: none;
+	}
+	
 	.tagchecklist {
 		max-width: 25em;
 	}
