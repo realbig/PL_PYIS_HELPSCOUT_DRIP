@@ -160,7 +160,7 @@ class PYIS_HelpScout_Drip_Admin {
 								</div>
 									
 								<p class="description">
-									<?php echo _x( "A list of acceptable Drip Tags to be shown within HelpScout. If left blank, all Tags are acceptable.", 'Acceptable Drip Tags Description', PYIS_HelpScout_Drip_ID ); ?>
+									<?php echo _x( "A list of acceptable Drip Tags to be shown within HelpScout. Regex patterns are acceptable. If left blank, all Tags are acceptable.", 'Acceptable Drip Tags Description', PYIS_HelpScout_Drip_ID ); ?>
 								</p>
 								
 							</td>
