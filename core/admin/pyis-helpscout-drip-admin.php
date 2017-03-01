@@ -24,6 +24,8 @@ class PYIS_HelpScout_Drip_Admin {
 		add_action( 'admin_init', array( $this, 'register_options' ) );
 		
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		
+		add_action( 'init', array( $this, 'fake_taxonomy' ) );
 
 	}
 	
@@ -129,13 +131,13 @@ class PYIS_HelpScout_Drip_Admin {
 							
 							<td>
 								
-								<div class="tagsdiv">
+								<div class="tagsdiv" id="pyis_drip_acceptable_tags_fake">
 									
 									<div class="jaxtag">
 									
 										<div class="nojs-tags hide-if-js">
 											<p>
-												<textarea name="pyis_helpscout_drip_acceptable_tags" rows="3" cols="20" class="the-tags" id="tax-input-post_tag" aria-describedby="new-tag-post_tag-desc">
+												<textarea name="pyis_helpscout_drip_acceptable_tags" rows="3" cols="20" class="the-tags">
 													<?php echo ( $acceptable_tags = get_option( 'pyis_helpscout_drip_acceptable_tags' ) ) ? $acceptable_tags : ''; ?>
 												</textarea>
 											</p>
@@ -145,7 +147,7 @@ class PYIS_HelpScout_Drip_Admin {
 
 											<p>
 
-												<input type="text" class="regular-text newtag" name="pyis_helpscout_drip_acceptable_tags_fake" />
+												<input type="text" class="regular-text newtag" name="pyis_helpscout_drip_acceptable_tags_fake" data-wp-taxonomy="pyis_drip_acceptable_tags_fake" />
 
 												<input type="button" class="button tagadd" value="Add">
 
@@ -298,6 +300,21 @@ class PYIS_HelpScout_Drip_Admin {
 			wp_enqueue_script( PYIS_HelpScout_Drip_ID . '-admin' );
 			
 		}
+		
+	}
+	
+	/**
+	 * tagBox is very insistent on there being a "real" Taxonomy to query, even if you null out the tagBox.get() function
+	 * Otherwise in WP v4.4.2 it returns 0. In later versions it will try to query "post_tag" if one is not defined.
+	 * Having a fake Taxonomy to query ensures there are /never/ results
+	 * 
+	 * @access		public
+	 * @since		1.0.0
+	 * @return		void
+	 */
+	public function fake_taxonomy() {
+		
+		register_taxonomy( 'pyis_drip_acceptable_tags_fake', null, array() );
 		
 	}
 	
