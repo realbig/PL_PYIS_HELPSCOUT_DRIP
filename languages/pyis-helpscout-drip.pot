@@ -114,12 +114,22 @@ msgctxt "Invalid Request Error"
 msgid "Access Denied"
 msgstr ""
 
-#: core/rest/pyis-helpscout-drip-helpscout-rest.php:154
+#: core/rest/pyis-helpscout-drip-helpscout-rest.php:155
 msgctxt "Email Address does not exist in Drip"
 msgid "<a href=\"mailto:%s\">%s</a> does not exist in Drip."
 msgstr ""
 
-#: core/rest/pyis-helpscout-drip-helpscout-rest.php:165
+#: core/rest/pyis-helpscout-drip-helpscout-rest.php:178
+msgctxt "No Lead Score for Email Address in Drip"
+msgid "No Lead Score for <a href=\"mailto:%s\">%s</a> in Drip."
+msgstr ""
+
+#: core/rest/pyis-helpscout-drip-helpscout-rest.php:192
 msgctxt "Email Address has no Tags in Drip"
 msgid "No Tags for <a href=\"mailto:%s\">%s</a> in Drip"
+msgstr ""
+
+#: core/views/pyis-helpscout-drip-lead-score-row.php:18
+msgctxt "Lead Score in Drip Output"
+msgid "Lead Score: %s"
 msgstr ""
