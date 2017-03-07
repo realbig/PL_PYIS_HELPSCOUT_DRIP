@@ -149,9 +149,10 @@ class PYIS_HelpScout_Drip_REST {
 		
 		$subscriber_email = $this->helpscout_data['customer']['email'];
 		
+		// This is the only case where we immediately bail, for obvious reasons
 		if ( property_exists( $this->drip_data, 'errors' ) ) {
 			
-			return '<div class="toggleGroup"><p>' . sprintf( _x( '<a href="mailto:%s">%s</a> does not exist in Drip.', 'Email Address does not exist in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) . '</p></div><div class="divider"></div>';
+			return '<div class="toggleGroup">' . str_replace( "\t", '', $this->error_message_row( sprintf( _x( '<a href="mailto:%s">%s</a> does not exist in Drip.', 'Email Address does not exist in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) ) ) . '</div><div class="divider"></div>';
 			
 		}
 		
@@ -161,15 +162,36 @@ class PYIS_HelpScout_Drip_REST {
 			return $subscriber->tags;
 		}, $this->drip_data->subscribers ) ) );
 		
-		if ( count( $tags ) == 0 ) {
-			return '<div class="toggleGroup"><p>' . sprintf( _x( 'No Tags for <a href="mailto:%s">%s</a> in Drip', 'Email Address has no Tags in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) . '</p></div><div class="divider"></div>';
+		$lead_scores = array_values( array_map( function( $subscriber ) {
+			return $subscriber->lead_score;
+		}, $this->drip_data->subscribers ) );
+		
+		// build HTML output
+		$html = '<div class="toggleGroup">';
+		
+		// While there should technically never be more than one per Email, Drip is weird and returns Subscribers in an Array
+		// I could always reset() it, but this way if there's some edge-case I'm not aware of it will still show the data
+		foreach( $lead_scores as $lead_score ) {
+			
+			if ( $lead_score == NULL ) {
+				
+				$html .= str_replace( "\t", '', $this->error_message_row( sprintf( _x( 'No Lead Score for <a href="mailto:%s">%s</a> in Drip.', 'No Lead Score for Email Address in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) ) );
+				
+				continue;
+				
+			}
+			
+			$html .= str_replace( "\t", '', $this->lead_score_row( $lead_score ) );
+			
 		}
 		
 		$acceptable_tags = get_option( 'pyis_helpscout_drip_acceptable_tags', '' );
 		$acceptable_tags = array_filter( explode( ',', $acceptable_tags ) );
 		
-		// build HTML output
-		$html = '<div class="toggleGroup">';
+		if ( count( $tags ) == 0 ) {
+			$html .= str_replace( "\t", '', $this->error_message_row( sprintf( _x( 'No Tags for <a href="mailto:%s">%s</a> in Drip', 'Email Address has no Tags in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) ) );
+		}
+		
 		foreach ( $tags as $tag ) {
 			
 			// If we're only allowing certain Tags through, we need to do some more processing
@@ -196,6 +218,48 @@ class PYIS_HelpScout_Drip_REST {
 		}
 		
 		$html .= '</div><div class="divider"></div>';
+		
+		return $html;
+		
+	}
+	
+	/**
+	 * Generates HTML for each Error Message
+	 * 
+	 * @param		string $error_message Error Message
+	 *							  
+	 * @access		public
+	 * @since		1.0.0
+	 * @return		string HTML
+	 */
+	public function error_message_row( $error_message ) {
+		
+		ob_start();
+		
+		include PYIS_HelpScout_Drip_DIR . 'core/views/pyis-helpscout-drip-error-message-row.php';
+		
+		$html = ob_get_clean();
+		
+		return $html;
+		
+	}
+	
+	/**
+	 * Generates HTML for each Lead Score
+	 * 
+	 * @param		string $lead_score Lead Score from Drip
+	 *							  
+	 * @access		public
+	 * @since		1.0.0
+	 * @return		string HTML
+	 */
+	public function lead_score_row( $lead_score ) {
+		
+		ob_start();
+		
+		include PYIS_HelpScout_Drip_DIR . 'core/views/pyis-helpscout-drip-lead-score-row.php';
+		
+		$html = ob_get_clean();
 		
 		return $html;
 		
