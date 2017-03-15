@@ -152,7 +152,7 @@ class PYIS_HelpScout_Drip_REST {
 		// This is the only case where we immediately bail, for obvious reasons
 		if ( property_exists( $this->drip_data, 'errors' ) ) {
 			
-			return '<div class="toggleGroup">' . str_replace( "\t", '', $this->error_message_row( sprintf( _x( '<a href="mailto:%s">%s</a> does not exist in Drip.', 'Email Address does not exist in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) ) ) . '</div><div class="divider"></div>';
+			return '<div class="toggleGroup">' . str_replace( "\t", '', $this->error_message_row( sprintf( _x( '<a href="mailto:%s">%s</a> does not exist in Drip.', 'Email Address does not exist in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ), $subscriber_email ) ) . '</div><div class="divider"></div>';
 			
 		}
 		
@@ -175,13 +175,13 @@ class PYIS_HelpScout_Drip_REST {
 			
 			if ( $lead_score == NULL ) {
 				
-				$html .= str_replace( "\t", '', $this->error_message_row( sprintf( _x( 'No Lead Score for <a href="mailto:%s">%s</a> in Drip.', 'No Lead Score for Email Address in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) ) );
+				$html .= str_replace( "\t", '', $this->error_message_row( sprintf( _x( 'No Lead Score for <a href="mailto:%s">%s</a> in Drip.', 'No Lead Score for Email Address in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ), $subscriber_email ) );
 				
 				continue;
 				
 			}
 			
-			$html .= str_replace( "\t", '', $this->lead_score_row( $lead_score ) );
+			$html .= str_replace( "\t", '', $this->lead_score_row( $lead_score, $subscriber_email ) );
 			
 		}
 		
@@ -189,7 +189,7 @@ class PYIS_HelpScout_Drip_REST {
 		$acceptable_tags = array_filter( explode( ',', $acceptable_tags ) );
 		
 		if ( count( $tags ) == 0 ) {
-			$html .= str_replace( "\t", '', $this->error_message_row( sprintf( _x( 'No Tags for <a href="mailto:%s">%s</a> in Drip', 'Email Address has no Tags in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ) ) );
+			$html .= str_replace( "\t", '', $this->error_message_row( sprintf( _x( 'No Tags for <a href="mailto:%s">%s</a> in Drip', 'Email Address has no Tags in Drip', PYIS_HelpScout_Drip_ID ), $subscriber_email, $subscriber_email ), $subscriber_email ) );
 		}
 		
 		foreach ( $tags as $tag ) {
@@ -213,9 +213,16 @@ class PYIS_HelpScout_Drip_REST {
 				
 			}
 			
-			$html .= str_replace( "\t", '', $this->tag_row( $tag ) );
+			$html .= str_replace( "\t", '', $this->tag_row( $tag, $subscriber_email ) );
 			
 		}
+		
+		// Add a link to the Subscriber in Drip
+		$subscriber_id = reset( array_values( array_map( function( $subscriber ) {
+			return $subscriber->id;
+		}, $this->drip_data->subscribers ) ) );
+		
+		$html .= str_replace( "\t", '', $this->subscriber_link_row( $subscriber_id, $subscriber_email ) );
 		
 		$html .= '</div><div class="divider"></div>';
 		
@@ -227,12 +234,13 @@ class PYIS_HelpScout_Drip_REST {
 	 * Generates HTML for each Error Message
 	 * 
 	 * @param		string $error_message Error Message
+	 * @param		string $subscriber_email Subscriber Email
 	 *							  
 	 * @access		public
 	 * @since		1.0.0
 	 * @return		string HTML
 	 */
-	public function error_message_row( $error_message ) {
+	public function error_message_row( $error_message, $subscriber_email ) {
 		
 		ob_start();
 		
@@ -248,12 +256,13 @@ class PYIS_HelpScout_Drip_REST {
 	 * Generates HTML for each Lead Score
 	 * 
 	 * @param		string $lead_score Lead Score from Drip
+	 * @param		string $subscriber_email Subscriber Email
 	 *							  
 	 * @access		public
 	 * @since		1.0.0
 	 * @return		string HTML
 	 */
-	public function lead_score_row( $lead_score ) {
+	public function lead_score_row( $lead_score, $subscriber_email ) {
 		
 		ob_start();
 		
@@ -269,16 +278,39 @@ class PYIS_HelpScout_Drip_REST {
 	 * Generates HTML for each Tag
 	 * 
 	 * @param		string $tag Tag from Drip
+	 * @param		string $subscriber_email Subscriber Email
 	 *							  
 	 * @access		public
 	 * @since		1.0.0
 	 * @return		string HTML
 	 */
-	public function tag_row( $tag ) {
+	public function tag_row( $tag, $subscriber_email ) {
 		
 		ob_start();
 		
 		include PYIS_HelpScout_Drip_DIR . 'core/views/pyis-helpscout-drip-tag-row.php';
+		
+		$html = ob_get_clean();
+		
+		return $html;
+		
+	}
+	
+	/**
+	 * Generates HTML for link to the Subscriber on Drip
+	 * 
+	 * @param		string $subscriber_id Subscriber ID
+	 * @param		string $subscriber_email Subscriber Email
+	 *							  
+	 * @access		public
+	 * @since		1.0.0
+	 * @return		string HTML
+	 */
+	public function subscriber_link_row( $subscriber_id, $subscriber_email ) {
+		
+		ob_start();
+		
+		include PYIS_HelpScout_Drip_DIR . 'core/views/pyis-helpscout-drip-subscriber-link-row.php';
 		
 		$html = ob_get_clean();
 		
