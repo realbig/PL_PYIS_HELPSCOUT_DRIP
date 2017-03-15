@@ -133,3 +133,8 @@ msgstr ""
 msgctxt "Lead Score in Drip Output"
 msgid "Lead Score: %s"
 msgstr ""
+
+#: core/views/pyis-helpscout-drip-subscriber-link-row.php:19
+msgctxt "Subscriber Link Text"
+msgid "View %s on Drip"
+msgstr ""
