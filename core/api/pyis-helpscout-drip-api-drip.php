@@ -26,7 +26,7 @@ class PYIS_HelpScout_Drip_API_Drip extends PYIS_HelpScout_Drip_API_Class {
 	 * @var			PYIS_HelpScout_Drip_API_Drip $account_id The Account ID the API Key belongs to. Yep, we need both.
 	 * @since		1.0.0
 	 */
-	private $account_id = '';
+	public $account_id = '';
 	
 	/**
 	 * @var		PYIS_HelpScout_Drip_API_Drip $password The Account ID the API Key belongs to. Yep, we need both.
