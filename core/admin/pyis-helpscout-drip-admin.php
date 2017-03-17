@@ -172,6 +172,23 @@ class PYIS_HelpScout_Drip_Admin {
 						<tr>
 							
 							<th scope="row">
+								<label for="pyis_helpscout_user_id">
+									<?php echo _x( 'HelpScout User ID of the Owner of the Drip Account', 'HelpScout User ID Label', PYIS_HelpScout_Drip_ID ); ?>
+								</label>
+							</th>
+							
+							<td>
+								<input required type="text" class="regular-text" name="pyis_helpscout_user_id" value="<?php echo ( $helpscout_user_id = get_option( 'pyis_helpscout_user_id' ) ) ? $helpscout_user_id : ''; ?>" /><br />
+								<p class="description">
+									<?php echo _x( 'Part of the HTML Response on HelpScout includes a link back to Drip that will only work for the Drip Account ID entered below. Whoever owns that Drip Account should also place their HelpScout User ID here. Your User ID can be found by viewing your Profile on HelpScout and looking at the URL in the address bar: <code>https://secure.helpscout.net/users/profile/&lt;user_id&gt;/</code>', 'User ID Link Text', PYIS_HelpScout_Drip_ID ); ?>
+								</p>
+							</td>
+						
+						</tr>
+						
+						<tr>
+							
+							<th scope="row">
 								<label for="pyis_drip_api_key">
 									<?php echo _x( 'Drip API Token', 'Drip API Key Label', PYIS_HelpScout_Drip_ID ); ?> <span class="required">*</span>
 								</label>
@@ -274,6 +291,7 @@ class PYIS_HelpScout_Drip_Admin {
 		
 		register_setting( 'pyis_helpscout_drip', 'pyis_helpscout_secret_key' );
 		register_setting( 'pyis_helpscout_drip', 'pyis_helpscout_drip_acceptable_tags' );
+		register_setting( 'pyis_helpscout_drip', 'pyis_helpscout_user_id' );
 		register_setting( 'pyis_helpscout_drip', 'pyis_drip_api_key' );
 		register_setting( 'pyis_helpscout_drip', 'pyis_drip_account_id' );
 		register_setting( 'pyis_helpscout_drip', 'pyis_drip_account_password' );
