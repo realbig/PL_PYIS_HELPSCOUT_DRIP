@@ -217,12 +217,19 @@ class PYIS_HelpScout_Drip_REST {
 			
 		}
 		
-		// Add a link to the Subscriber in Drip
-		$subscriber_id = reset( array_values( array_map( function( $subscriber ) {
-			return $subscriber->id;
-		}, $this->drip_data->subscribers ) ) );
+		// We only want to add the link back to Drip if the current HelpScout User is the same as the one who owns the Drip account
+		// Otherwise the link goes nowhere, and that's no fun
+		$helpscout_user_id = get_option( 'pyis_helpscout_user_id' );
+		if ( trim( $helpscout_user_id ) == $this->helpscout_data['user']['id'] ) {
 		
-		$html .= str_replace( "\t", '', $this->subscriber_link_row( $subscriber_id, $subscriber_email ) );
+			// Add a link to the Subscriber in Drip
+			$subscriber_id = reset( array_values( array_map( function( $subscriber ) {
+				return $subscriber->id;
+			}, $this->drip_data->subscribers ) ) );
+
+			$html .= str_replace( "\t", '', $this->subscriber_link_row( $subscriber_id, $subscriber_email ) );
+			
+		}
 		
 		$html .= '</div><div class="divider"></div>';
 		
