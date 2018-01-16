@@ -56,8 +56,9 @@ class PYIS_HelpScout_Drip_API_Drip extends PYIS_HelpScout_Drip_API_Class {
 		$this->password = $password;
 		
 		$this->set_headers( array(
-			'Authorization' => 'Basic ' . base64_encode( $this->api_key . ':' . $this->password ),
-			'Content-Type' => 'application/vnd.api+json',
+			'Authorization: Basic ' . base64_encode( $this->api_key . ':' . $this->password ),
+			'Content-Type: application/vnd.api+json',
+			'Accept: application/json, text/javascript, */*; q=0.01',
 		) );
 
 	}

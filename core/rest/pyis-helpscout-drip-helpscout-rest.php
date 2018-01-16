@@ -149,6 +149,12 @@ class PYIS_HelpScout_Drip_REST {
 		
 		$subscriber_email = $this->helpscout_data['customer']['email'];
 		
+		if ( empty( $this->drip_data ) ) {
+			
+			return '<div class="toggleGroup">' . str_replace( "\t", '', $this->error_message_row( __( 'Something went wrong querying Drip.', PYIS_HelpScout_Drip_ID ) ) ) . '</div><div class="divider"></div>';
+			
+		}
+		
 		// This is the only case where we immediately bail, for obvious reasons
 		if ( property_exists( $this->drip_data, 'errors' ) ) {
 			

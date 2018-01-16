@@ -110,6 +110,8 @@ abstract class PYIS_HelpScout_Drip_API_Class {
 
 	/**
 	 * Performs the underlying HTTP request
+	 * wp_remote_request() stopped working, possibly due to wp-includes/certificates/ca-bundle.crt not being updated for 2 years? Not sure
+	 * cURL implementation based on https://github.com/DripEmail/drip-php/blob/master/Drip_API.class.php
 	 * 
 	 * @param		string 	$http_verb  The HTTP verb to use: get, post, put, patch, delete
 	 * @param		string	$method		The API method to be called
@@ -121,18 +123,49 @@ abstract class PYIS_HelpScout_Drip_API_Class {
 	 * @return		array|false 		Assoc array of API response, decoded from JSON
 	 */
 	private function make_request( $http_verb, $method, $args = array(), $timeout = 10 ) {
-
-		$args = wp_parse_args( $args, array(
-			'method' => $http_verb,
-			'timeout' => $timeout,
-			'headers' => $this->headers,
-		) );
 		
 		$url = $this->api_endpoint . '/' . $method;
 		
-		$response = wp_remote_request( $url, $args );
+		$ch = curl_init();
+		
+		curl_setopt( $ch, CURLOPT_FRESH_CONNECT, true );
+        curl_setopt( $ch, CURLOPT_FORBID_REUSE, true );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false );
+        curl_setopt( $ch, CURLOPT_TIMEOUT, $timeout );
+        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
+		
+		if ( $http_verb !== 'get' ) {
+			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, strtoupper( $http_verb ) );
+		}
+		
+		if ( ! empty( $args ) ) {
 
-		return json_decode( $response['body'] );
+			if ( ( isset( $args['__req'] ) && strtolower( $args['__req'] ) == 'get' ) || 
+				$http_verb == 'get' ) {
+				
+                unset( $args['__req'] );
+                $url .= '?' . http_build_query( $args );
+				
+            }
+			elseif ( $http_verb == 'post' || 
+					$http_verb == 'delete' ) {
+				
+                $params_str = is_array( $args ) ? json_encode( $args ) : $args;
+                curl_setopt( $ch, CURLOPT_POSTFIELDS, $params_str );
+				
+            }
+			
+        }
+		
+		curl_setopt( $ch, CURLOPT_URL, $url);
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, $this->headers );
+		
+		$buffer = curl_exec( $ch );
+
+		return json_decode( $buffer );
 		
 	}
 	
